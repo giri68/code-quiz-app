@@ -1,0 +1,21 @@
+
+What is it?
+Quiz app for learning to code
+Multiple-choice format
+
+For right now quizzes are entered on back end by admins (no admin interface yet)
+
+Users create profile & log in
+User can select quizzes from a library of quizzes
+User can take a quiz right away or later
+User can start a quiz and finish later
+User's answer are saved in database, so user can view score & answers later
+
+MVP allows simple quiz-taking and score-keeping only
+But architecture allows for adding learning tools, such as links to more information, commenting
+Early feature should be allowing users to see
+  1) Which questions they got right or wrong
+  2) Correct answers to all questions after finishing quiz
+
+Entire app should be designed as mobile-first
+
