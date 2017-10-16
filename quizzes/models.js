@@ -16,7 +16,7 @@ const QuizSchema = mongoose.Schema({
     answers: [{
       answer: { type: String },
       correct: { type: Boolean },
-      id: { type: String }, // where do we set ObjectId()
+      id: { type: String }, // where do we set ObjectId()?
     }] // end answers array
   }] // end questions array
 });

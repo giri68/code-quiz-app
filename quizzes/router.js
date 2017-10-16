@@ -13,7 +13,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-// create a new quiz
+// create a new quiz AUTHENTICATE THIS ONE
 router.post('/', jsonParser, (req, res) => {
   // validate body of post
   // validate quiz name
@@ -35,8 +35,10 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
+// create put endpoint(s) to update quiz, including add comments (after MVP)
+
 // access quiz by id (load entire quiz array, then user cycles through array)
-router.get('/:id', jwtAuth, (req, res) => {
+router.get('/:id', (req, res) => {
   return Quiz.findById()
     .then(quiz => {
       return res.status(200).json(quiz.apiRepr());

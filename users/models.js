@@ -24,11 +24,11 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   quizzes: [{
-    id: { type: mongoose.Schema.Types.ObjectId, ref: 'Quizzes' },
+    id: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
     questions: [{
-      id: { type: String },
+      id: { type: String }, // is this right, if we store ObjectId()???
       answers: [{
-        id: { type: String },
+        id: { type: String }, // same question
       }] // end answers array
     }] // end questions array
   }] // end quizzes array
@@ -39,7 +39,7 @@ UserSchema.methods.apiRepr = function () {
     firstName: this.firstName,
     lastName: this.lastName,
     username: this.username,
-    quizzes: this.quizzes,
+    quizzes: this.quizzes, // maybe just show name of quiz? 
     id: this._id };
 };
 
