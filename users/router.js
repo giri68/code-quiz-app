@@ -141,6 +141,19 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
+router.post('/:id/choices', jsonParser, (req, res)=> {
+  //console.log(req.body.favouriteGameId); 
+  let userId = req.body.userId;
+  let questionId = req.body.questionId;
+  let quizId = req.body.quizId;
+  let choices = req.body.choices;
+  Choice.create({userId, questionId, quizId, choices})
+    .then(choice => res.status(204).json(choice))
+    .catch(err => {
+      res.status(500).json({ message: 'internal server error' });
+    });
+});
+
 // access user by id
 router.get('/user/:userId', (req, res) => {
   console.log('res', res);
