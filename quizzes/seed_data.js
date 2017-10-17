@@ -1,8 +1,14 @@
 'use strict';
+const express = require('express');
 
+const {PORT, DATABASE_URL} = require('../config');
+const {dbConnect} = require('../db-mongoose');
 const mongoose = require('mongoose');
-
 mongoose.Promise = global.Promise;
+const app = express();
+
+const { Quiz } = require('./models');
+const { User } = require('../users');
 
 const listOfQuizzes = [
   {
@@ -215,3 +221,35 @@ const listOfQuizzes = [
     }
     ]
   }];
+
+let server;
+  
+function runServer(url = DATABASE_URL, port = PORT) {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(url, { useMongoClient: true }, err => {
+      if (err) {
+        return reject(err);
+      }
+      server = app
+        .listen(port, () => {
+          console.log(`Your app is listening on port ${port}`);
+          resolve();
+        })
+        .on('error', err => {
+          mongoose.disconnect();
+          reject(err);
+        });
+    });
+  });
+}
+
+return runServer()
+  .then(()=> {
+    Quiz.insertMany(listOfQuizzes)
+      .then(quizzes => {
+        console.log(quizzes);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
