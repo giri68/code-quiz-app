@@ -28,15 +28,6 @@ app.use('/api/users', userRouter);
 app.use('/api/quizzes', quizRouter);
 
 
-// app.get('/', (req, res) => {
-//   return res.status(200).json({
-//     key: 'value'
-//   })
-//     .catch(err => {
-//       res.status(500).json({ code: 500, message: 'Internal server error' });
-//     });
-// });
-
 function runServer(port = PORT) { 
   const server = app
     .listen(port, () => {

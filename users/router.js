@@ -142,8 +142,8 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 // access user by id
-router.get('/:id', jwtAuth, (req, res) => {
-  return User.findById()
+router.get('/:id', (req, res) => { // add jwtAuth back
+  return User.findById(req.params.id)
     .then(user => {
       return res.status(200).json(user.apiRepr());
     })
