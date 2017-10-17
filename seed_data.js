@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const app = express();
 
-const { Quiz } = require('./quizzes');
-const { User } = require('./users');
+const { Quiz, Question } = require('./quizzes');
+const { User, Choice } = require('./users');
 
 const listOfQuizzes = [
   {
@@ -15,7 +15,21 @@ const listOfQuizzes = [
     description: 'This is a quiz of HTML',
     category: 'HTML',
     difficulty: 1,
-    questions: [{
+  }, 
+  { 
+    name: 'CSS Quiz',
+    description: 'This is a quiz of CSS',
+    category: 'CSS',
+    difficulty: 1,
+  }
+];
+
+
+const listOfQuestions = [
+  // @@@@@@@@@@@@ 1ST LIST OF QUESTIONS @@@@@@@@@
+  // @@@@@@@@@@@@ HTML QUIZ @@@@@@@@@
+  [
+    {
       inputType: 'checkbox', 
       question: 'What is a DOM?',
       answers: [{
@@ -78,14 +92,11 @@ const listOfQuizzes = [
       }
       ]
     }
-    ] // end of array of questions
-  }, // end of quiz
-  { // start new quiz
-    name: 'CSS Quiz',
-    description: 'This is a quiz of CSS',
-    category: 'CSS',
-    difficulty: 1,
-    questions: [{
+  ],
+  // @@@@@@@@@@@@ 2ND LIST OF QUESTIONS @@@@@@@@@
+  // @@@@@@@@@@@@ CSS QUIZ @@@@@@@@@
+  [
+    {
       inputType: 'checkbox', 
       question: 'What is a CSS?',
       answers: [{
@@ -190,8 +201,8 @@ const listOfQuizzes = [
       }
       ]
     }
-    ]
-  }];
+  ]
+];
 
 // This works, but Mongo is auto-populating sub-document IDs, so not needed.
 // listOfQuizzes.forEach((quiz, index)=>{
@@ -232,13 +243,34 @@ function runServer(url = DATABASE_URL, port = PORT) {
   });
 }
 
-return runServer()
+return runServer()   
   .then(()=> {
-    Quiz.insertMany(listOfQuizzes)
-      .then(quizzes => {
-        console.log('SUCCESS! CHECK YOUR DATABASE!!');
-      })
-      .catch(err => {
-        console.log(err);
+    const arrayOfPromises = listOfQuizzes.map((quiz, idx)=>{
+      return Quiz.create(listOfQuizzes[idx]);
+    });
+    return Promise.all(arrayOfPromises);
+  })
+  .then((quizzes)=> {
+    // console.log(quizzes);
+    return quizzes.map(quiz=>quiz._id);
+  })
+  .then((ids)=>{
+    return listOfQuestions.forEach((questionArray, index)=>{
+      questionArray.forEach((question) => {
+        question.quizId = ids[index];
       });
+    });
+  })
+  .then(()=> {
+    const arrayOfQuestionPromises = listOfQuestions.map((question, idx)=>{
+      return Question.insertMany(listOfQuestions[idx]); // insertMany because inner array
+    });
+    return Promise.all(arrayOfQuestionPromises);
+  })
+  .then(questions => {
+    // console.log('questions',questions);
+    console.log('SUCCESS! CHECK YOUR DATABASE!!');
+  })
+  .catch(err => {
+    console.log(err);
   });

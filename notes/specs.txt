@@ -19,3 +19,46 @@ Early feature should be allowing users to see
 
 Entire app should be designed as mobile-first
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoints:
+
+get user by id
+get list of all quizzes
+get list of all questions by quiz id
+get list of all choices by quiz id
+create choice (submit ONE answer)
+  request includes: user id, quiz id, question id, choice ids
+  post to new document in choices collection
+put choices (score multiple choices)
+  request includes: quiz id, user id, array of choices { question id, choices }
+  get all questions by quiz id (on server)
+  for each question 
+    filter answers by true
+    sort trueAnswers by id
+    sort choices by id
+    compare trueAnswers against choices
+    if exact match choice.correct = true else choice.correct = false
+  http response includes array of choices { question.id, correct }
+
+example of above:
+  request
+      [
+        {
+          userId
+          questionId
+          quizId
+          choices []
+        }
+      ]
+
+  response
+      [        for each... this is array...
+        {
+          userId
+          questionId
+          quizId
+          choices []
+          correct <<<<< what we are adding
+        }
+      ]
