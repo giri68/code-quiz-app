@@ -44,5 +44,6 @@ QuizSchema.methods.apiRepr = function () {
 };
 
 const Quiz = mongoose.models.User || mongoose.model('Quiz', QuizSchema);
+const Question = mongoose.models.User || mongoose.model('Question', QuestionSchema);
 
-module.exports = { Quiz };
+module.exports = { Quiz, Question };

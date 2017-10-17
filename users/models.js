@@ -39,7 +39,7 @@ UserSchema.methods.apiRepr = function () {
     firstName: this.firstName,
     lastName: this.lastName,
     username: this.username,
-    // quizzes: this.quizzes, // maybe just show name of quiz? 
+     quizzes: this.quizzes, // maybe just show name of quiz? 
     id: this._id 
   };
 };
