@@ -40,7 +40,8 @@ UserSchema.methods.apiRepr = function () {
     lastName: this.lastName,
     username: this.username,
     quizzes: this.quizzes, // maybe just show name of quiz? 
-    id: this._id };
+    id: this._id 
+  };
 };
 
 UserSchema.methods.validatePassword = function (password) {
