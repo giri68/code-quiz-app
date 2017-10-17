@@ -34,7 +34,11 @@ UserSchema.methods.apiRepr = function () {
     firstName: this.firstName,
     lastName: this.lastName,
     username: this.username,
+<<<<<<< HEAD
+    quizzes: this.quizzes, // maybe just show name of quiz? 
+=======
     quizzes: this.quizzes, 
+>>>>>>> c3f2c81e815dd61dee11279aff57612139a0f0ec
     id: this._id 
   };
 };

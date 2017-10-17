@@ -4,7 +4,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Quiz } = require('./models');
+const { Quiz, Question } = require('./models');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -56,6 +56,50 @@ router.get('/', (req, res) => {
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });
     });
+});
+
+
+
+router.put('/:quizId', jsonParser, jwtAuth, (req, res) => {
+  Quiz
+    .findByIdAndUpdate(req.params.quizid, {
+      $set: {
+        name:req.body.name,
+        description: req.body.description,
+        category: req.body.category,
+        difficulty: req.body.difficulty,
+        questions: req.body.questions
+      }
+    })
+    .then(game => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
+});
+
+router.put('/:questionId', jsonParser, jwtAuth, (req, res) => {
+  Question
+    .findByIdAndUpdate(req.params.questionId, {
+      $set: {
+        question:req.body.question,
+        inputType: req.body.inputType,
+        answers: req.body.answers
+      }
+    })
+    .then(game => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
+});
+
+
+router.delete('/:quizId', jwtAuth, (req, res) => {
+  Quiz
+    .findByIdAndRemove(req.params.quizid)
+    .then(quiz => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
+});
+router.delete('/:questionId', jwtAuth, (req, res) => {
+  Question
+    .findByIdAndRemove(req.params.questionId)
+    .then(quiz => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 module.exports = { router };
