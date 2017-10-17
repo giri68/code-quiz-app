@@ -8,19 +8,22 @@ const QuestionSchema = mongoose.Schema({
   question: { type: String },
   inputType: { type: String }, // radio, checkbox, text
   answers: [{
-    answer: { type: String },
+    option: { type: String },
     correct: { type: Boolean },
     id: { type: Number }, // Mongo is currently creating ObjectId here...
-  }]
+  }],
+  quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' } // each question belongs to 1 only quiz
 });
 
 QuestionSchema.methods.apiRepr = function () {
   return { 
-    answers: this.answers.map(answer=>delete answer.correct), // figure out how to mask answers.correct
+    options: this.option.map(option=>delete option.correct), // figure out how to mask answers.correct
     inputType: this.inputType,
     question: this.question,
     id: this._id };
 };
+
+const Question = mongoose.models.Question || mongoose.model('Question', QuestionSchema);
 
 const QuizSchema = mongoose.Schema({
   name: {
@@ -30,20 +33,15 @@ const QuizSchema = mongoose.Schema({
   description: { type: String },
   category: { type: String }, // HTML, CSS, JS
   difficulty: { type: Number }, // scale of 1 easy 5 advanced
-  questions: [{
-    id: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' }
-  }] // end questions array
 });
 
 QuizSchema.methods.apiRepr = function () {
   return { 
     name: this.name,
     description: this.description,
-    questions: this.questions,
     id: this._id };
 };
 
-const Quiz = mongoose.models.User || mongoose.model('Quiz', QuizSchema);
-const Question = mongoose.models.User || mongoose.model('Question', QuestionSchema);
+const Quiz = mongoose.models.Quiz || mongoose.model('Quiz', QuizSchema);
 
 module.exports = { Quiz, Question };

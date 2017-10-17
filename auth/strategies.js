@@ -17,8 +17,6 @@ const { JWT_SECRET } = require('../config');
 //   }
 // ));
 
-
-
 const basicStrategy = new BasicStrategy((username, password, callback) => {
   console.log('I am in basic');
   let user;
