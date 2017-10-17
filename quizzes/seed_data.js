@@ -1,13 +1,13 @@
 'use strict';
 const express = require('express');
 
-const {PORT, DATABASE_URL} = require('./config');
+const {PORT, DATABASE_URL} = require('../config');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const app = express();
 
-const { Quiz } = require('./quizzes');
-const { User } = require('./users');
+const { Quiz } = require('./models');
+const { User } = require('../users');
 
 const listOfQuizzes = [
   {
@@ -227,7 +227,7 @@ function dbConnect(url = DATABASE_URL) {
     console.error(err);
   });
 }
-
+  
 let server;
   
 function runServer(url = DATABASE_URL, port = PORT) {

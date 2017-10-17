@@ -142,15 +142,28 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 // access user by id
-router.get('/:id', (req, res) => { // add jwtAuth back
+router.get('/:id', jwtAuth, (req, res) => {
   return User.findById(req.params.id)
     .then(user => {
       return res.status(200).json(user.apiRepr());
     })
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });
+      console.log(err);
     });
 });
+router.get('/', (req, res) => {
+  console.log(User.find());
+  return User.find()
+    .then(users => {
+      let usersJSON = users.map(user=>user.apiRepr());
+      return res.status(200).json(usersJSON);
+    })
+    .catch(err => {
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
 
 // delete user
 router.delete('/:id', jwtAuth, (req, res) => {

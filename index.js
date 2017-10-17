@@ -9,6 +9,7 @@ mongoose.Promise = global.Promise;
 
 const { router: userRouter } = require('./users');
 const { router: quizRouter } = require('./quizzes');
+const { router: authRouter, jwtAuth, basicStrategy, jwtStrategy } = require('./auth');
 
 const cors = require('cors');
 const morgan = require('morgan');
@@ -27,6 +28,14 @@ app.use(
 
 app.use('/api/users', userRouter);
 app.use('/api/quizzes', quizRouter);
+app.use('/api/auth/', authRouter);
+app.get('/api/protected', jwtAuth, (req, res) => {
+  return res.json({ data: 'rosebud' });
+});
+
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
+});
 
 function dbConnect(url = DATABASE_URL) {
   return mongoose.connect(DATABASE_URL, {useMongoClient: true}).catch(err => {
