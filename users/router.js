@@ -4,7 +4,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { User } = require('./models');
+const { User, Choice } = require('./models');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -142,10 +142,22 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 // access user by id
-router.get('/:id', jwtAuth, (req, res) => {
-  return User.findById(req.params.id)
+router.get('/user/:userId', (req, res) => {
+  console.log('res', res);
+  return User.findById(req.params.userId)
     .then(user => {
       return res.status(200).json(user.apiRepr());
+    })
+    .catch(err => {
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+      console.log(err);
+    });
+});
+
+router.get('/choice/:quizId', (req, res) => {
+  return Choice.find({quizId: req.params.quizId})
+    .then(choice => {
+      return res.status(200).json(choice.apiRepr());
     })
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });

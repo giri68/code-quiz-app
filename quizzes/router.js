@@ -38,8 +38,8 @@ router.post('/', jsonParser, (req, res) => {
 // create put endpoint(s) to update quiz, including add comments (after MVP)
 
 // access quiz by id (load entire quiz array, then user cycles through array)
-router.get('/:id', (req, res) => {
-  return Quiz.findById()
+router.get('quiz/:quizId', (req, res) => {
+  return Quiz.findById(req.params.quizId)
     .then(quiz => {
       return res.status(200).json(quiz.apiRepr());
     })
@@ -48,10 +48,25 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/question/:quizId', (req, res) => {
+  
+  return Question.find({quizId: req.params.quizId})
+  
+    .then(questions => {
+      return res.status(200).json(questions);
+    })
+    .catch(err => {
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
+
+
 router.get('/', (req, res) => {
   return Quiz.find()
-    .then(quiz => {
-      return res.status(200).json(quiz.apiRepr());
+    .then(quizzes => {
+      let quizzesArray = quizzes.map(quiz => quiz.apiRepr());
+      return res.status(200).json(quizzesArray);
     })
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });
