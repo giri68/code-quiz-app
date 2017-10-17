@@ -2,11 +2,25 @@
 
 const { BasicStrategy } = require('passport-http');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-
 const { User } = require('../users/models');
 const { JWT_SECRET } = require('../config');
 
+
+// passport.use(new BasicStrategy(
+//   function(username, password, done) {
+//     User.findOne({ username: username }, function (err, user) {
+//       if (err) { return done(err); }
+//       if (!user) { return done(null, false); }
+//       if (!user.validPassword(password)) { return done(null, false); }
+//       return done(null, user);
+//     });
+//   }
+// ));
+
+
+
 const basicStrategy = new BasicStrategy((username, password, callback) => {
+  console.log('I am in basic');
   let user;
   User.findOne({ username: username })
     .then(_user => {
@@ -40,7 +54,6 @@ const jwtStrategy = new JwtStrategy(
   {
     secretOrKey: JWT_SECRET,
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
-    // algorithms: ['HS256']
   },
   (payload, done) => {
     done(null, payload.user);

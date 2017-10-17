@@ -9,5 +9,7 @@ module.exports = {
         process.env.DATABASE_URL || 'mongodb://localhost/code-quiz',
   TEST_DATABASE_URL:
         process.env.TEST_DATABASE_URL ||
-        'mongodb://localhost/code-quiz-test'
+        'mongodb://localhost/code-quiz-test',
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIRY: process.env.JWT_EXPIRY
 };
