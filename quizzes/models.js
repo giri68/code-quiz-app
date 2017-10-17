@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
+
+
 const QuizSchema = mongoose.Schema({
   name: {
     type: String,
