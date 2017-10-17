@@ -10,13 +10,16 @@ const QuizSchema = mongoose.Schema({
     required: true
   },
   description: { type: String },
+  category: { type: String },
+  difficulty: { type: Number }, // scale of 1 easy 5 advanced
   questions: [{
-    id: { type: Number }, // where set ObjectId()??
+    id: { type: Number }, // Mongo is currently creating ObjectId here...
     question: { type: String },
+    inputType: { type: String }, // radio, checkbox, text
     answers: [{
       answer: { type: String },
       correct: { type: Boolean },
-      id: { type: Number }, // where do we set ObjectId()?
+      id: { type: Number }, // Mongo is currently creating ObjectId here...
     }] // end answers array
   }] // end questions array
 });
