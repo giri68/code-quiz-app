@@ -29,6 +29,8 @@ const UserSchema = mongoose.Schema({
     total: { type: Number },
     completed: { type: Number },
     correct: { type: Number },
+    category: {type: String },
+    difficulty: {type: Number }
   }],
   badges: { type: String },
   recent: [{type: String}]
