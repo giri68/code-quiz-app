@@ -154,6 +154,40 @@ router.post('/:id/choices', jsonParser, (req, res)=> {
     });
 });
 
+router.put('/:id/choices', jsonParser, (req, res) => {
+  // read array of choices from body
+  const quizChoices = req.body.choices; //choices are array
+  const quizId = req.body.quizId;
+  const userId = req.body.userId;
+  // loop thru choices array and calculate score
+  quizChoices.forEach(choice=>{
+    // sort choices by id
+    choice.answers.sort((a._id,b._id) => a._id-b._id);
+    console.log(choice.answers); 
+    return Question.findOne({_id: choice.questionId })
+    // get the matching question
+    .then((question)=>{
+      // get the correct answer from the question
+      return question.answers.filter(answer => answer.correct);
+    })
+    .then((correctAnswers)=>{
+      // sort answers by id
+      return question.answers.sort((a._id,b._id) => a._id-b._id);      
+    })
+    .then(correctAnswers => {
+      // return true or false;
+      return choice.answers === correctAnswers;
+    })    
+    .then(correct => {
+      return res.status(204).send(correct);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+})
+
+
 // access user by id
 router.get('/user/:userId', (req, res) => {
   console.log('res', res);
@@ -162,8 +196,8 @@ router.get('/user/:userId', (req, res) => {
       return res.status(200).json(user.apiRepr());
     })
     .catch(err => {
-      res.status(500).json({ code: 500, message: 'Internal server error' });
       console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
     });
 });
 
