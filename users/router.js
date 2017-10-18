@@ -143,7 +143,8 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 router.post('/choices', jsonParser, (req, res)=> {
-  //console.log(req.body.favouriteGameId); 
+  //req.body === { userId: '' , questionId: '', quizId: '' , choices: [ { id: '' } ] } ; 
+  //req.body.choices === {  choices: [ { id: '' } ] } ; 
   let userId = req.body.userId;
   let questionId = req.body.questionId;
   let quizId = req.body.quizId;
