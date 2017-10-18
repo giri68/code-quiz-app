@@ -1,11 +1,11 @@
 'use strict';
 // endpoint is /api/users/
+// index: helpers, post, put, get, delete
 
 const express = require('express');
 const router = express.Router();
 
-const { User, Choice } = require('./models');
-const { Question } = require('../quizzes');
+const { User, } = require('./models');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -142,130 +142,6 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-// CHECK THIS WITH MULTIPLES
-const formatQuestionOptionIds = question => {
-  let correct = question.answers.filter(answer => answer.correct);
-  console.log('correct',correct);                
-  let correct_id = correct.map(answer=>String(answer._id));
-  console.log('correct_id',correct_id);  
-  let correctSort = correct_id.sort((a,b)=>a-b);   
-  console.log('correctSort',correctSort); 
-  let correctJoin = correctSort.join(', ');   
-  console.log('correctJoin',correctJoin); 
-  return correctJoin;
-};
-
-// CHECK THIS WITH MULTIPLES
-const formatChoiceIds = choices => {
-  console.log('choicesRaw',choices); 
-  let choicesClean = choices.map(choice => choice.optionId);
-  console.log('choicesClean',choicesClean); 
-  let choicesSort = choicesClean.sort((a,b) => a-b);
-  console.log('choicesSort',choicesSort); 
-  let choicesJoin = choicesSort.join(', ');   
-  console.log('choicesJoin',choicesJoin); 
-  return choicesJoin;
-};
-
-router.post('/choices', jsonParser, (req, res)=> {
-  let makeSureReqBodyHasThisFormat =  {
-    "userId": "59e51b41c5944e09d2bc9036",
-    "questionId": "59e651e1c7bea3a51c15d900",
-    "quizId": "59e651e1c7bea3a51c15d8fe",
-    "choices" : [
-      {"optionId" : "59e651e1c7bea3a51c15d904"},
-      {"optionId" : "59e651e1c7bea3a51c15d905"},
-    ]
-  };
-  let userId = req.body.userId;
-  let questionId = req.body.questionId;
-  let quizId = req.body.quizId;
-  let choices = req.body.choices;             
-  let formattedChoices = formatChoiceIds(choices);          // format choice ids as sorted string
-  let choiceId;
-  let isCorrect;
-  return Choice.create({userId, questionId, quizId, choices})  // enter choice in db
-    .then(choice => {
-      console.log('choiceCreated',choice);
-      choiceId = choice._id;                                  // save & hoist id of choice created
-      console.log('saved choice._id',choice._id);
-      return Question.findById( questionId );                 // find associated question
-    })
-    .then(question=>formatQuestionOptionIds(question))       // format answers as a sorted string
-    .then(questionIds=> {
-      return isCorrect = questionIds === formattedChoices;   // compare, return true or false, hoist
-    })    
-    .then(correct => {
-      return Choice.findByIdAndUpdate(choiceId, { $set: {correct: isCorrect} }, { new: true });
-    })
-    .then(correct => res.status(200).json(isCorrect))          // return true or false
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-    });
-});
-
-// WE DON'T NEED THIS ANYMORE! ;)
-// router.put('/choices/:id', jsonParser, (req, res) => {
-//   console.log(req.body);
-//   return Question.findOne({_id: req.body.questionId })
-//     .then(question=>formatQuestionOptionIds(question))
-//     .then(questionIds=> questionIds === formatChoiceIds(req.body.choiceIds))
-//     .then(correct => res.status(200).send(correct))
-//     .catch(err => {
-//       console.log(err);
-//       res.status(500).json({ code: 500, message: 'Internal server error' });
-//     });
-// });
-
-// access user by id
-router.get('/user/:userId', (req, res) => {
-  console.log('res', res);
-  return User.findById(req.params.userId)
-    .then(user => {
-      return res.status(200).json(user.apiRepr());
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-    });
-});
-
-router.get('/choice/:quizId', (req, res) => {
-  return Choice.find({quizId: req.params.quizId})
-    .then(choice => {
-      return res.status(200).json(choice.apiRepr());
-    })
-    .catch(err => {
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-      console.log(err);
-    });
-});
-router.get('/', (req, res) => {
-  console.log(User.find());
-  return User.find()
-    .then(users => {
-      let usersJSON = users.map(user=>user.apiRepr());
-      return res.status(200).json(usersJSON);
-    })
-    .catch(err => {
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-    });
-});
-
-
-// delete user
-router.delete('/:id', jwtAuth, (req, res) => {
-  User
-    .findByIdAndRemove(req.params.id)
-    .then(() => {
-      res.status(204).end();
-    })
-    .catch(err => {
-      return res.status(500).json({ message: 'something went wrong' });
-    });
-});
-
 // update a user profile
 router.put('/:id', jsonParser, jwtAuth, (req, res) => {
 
@@ -320,6 +196,43 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
     });
 });
 
-// write another endpoint for user's answers to questions
+// get all users DANGER ZONE!!!!
+router.get('/', (req, res) => {
+  console.log(User.find());
+  return User.find()
+    .then(users => {
+      let usersJSON = users.map(user=>user.apiRepr());
+      return res.status(200).json(usersJSON);
+    })
+    .catch(err => {
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
+// get user by id
+router.get('/user/:userId', (req, res) => {
+  console.log('res', res);
+  return User.findById(req.params.userId)
+    .then(user => {
+      return res.status(200).json(user.apiRepr());
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
+
+// delete user
+router.delete('/:id', jwtAuth, (req, res) => {
+  User
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(err => {
+      return res.status(500).json({ message: 'something went wrong' });
+    });
+});
 
 module.exports = { router };

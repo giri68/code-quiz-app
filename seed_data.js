@@ -274,3 +274,32 @@ return runServer()
   .catch(err => {
     console.log(err);
   });
+
+  // router.put('/:questionId', jsonParser, jwtAuth, (req, res) => {
+  //   Question
+  //     .findByIdAndUpdate(req.params.questionId, {
+  //       $set: {
+  //         question:req.body.question,
+  //         inputType: req.body.inputType,
+  //         answers: req.body.answers
+  //       }
+  //     })
+  //     .then(game => res.status(204).end())
+  //     .catch(err => res.status(500).json({ message: 'Internal server error' }));
+  // });
+
+  // delete entire quiz
+// router.delete('/:quizId', jwtAuth, (req, res) => {
+//   Quiz
+//     .findByIdAndRemove(req.params.quizid)
+//     .then(quiz => res.status(204).end())
+//     .catch(err => res.status(500).json({ message: 'Internal server error' }));
+// });
+
+// // delete a question
+// router.delete('/:questionId', jwtAuth, (req, res) => {
+//   Question
+//     .findByIdAndRemove(req.params.questionId)
+//     .then(quiz => res.status(204).end())
+//     .catch(err => res.status(500).json({ message: 'Internal server error' }));
+// });

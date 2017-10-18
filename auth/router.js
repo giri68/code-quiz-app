@@ -16,11 +16,8 @@ const createAuthToken = function (user) {
   });
 };
 
-
-
 const basicAuth = passport.authenticate('basic', { session: false });
 const jwtAuth = passport.authenticate('jwt', { session: false });
-
 
 router.post('/login', basicAuth, (req, res) => {
   const authToken = createAuthToken(req.user.apiRepr());

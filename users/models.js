@@ -6,23 +6,10 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const UserSchema = mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   quizzes: [{
     id: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
     name: { type: String },
@@ -42,6 +29,8 @@ UserSchema.methods.apiRepr = function () {
     lastName: this.lastName,
     username: this.username,
     quizzes: this.quizzes, 
+    badges: this.badges, 
+    recent: this.recent,
     id: this._id 
   };
 };
@@ -56,25 +45,4 @@ UserSchema.statics.hashPassword = function (password) {
 
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
-const ChoiceSchema = mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  questionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' },
-  quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
-  choices: [{ id: { type: String } }], // these should match answer ids
-  correct: {type: Boolean} // comparison on server side at time of scoring
-});
-
-ChoiceSchema.methods.apiRepr = function () {
-  return { 
-    userId: this.firstName,
-    questionId: this.lastName,
-    quizId: this.username,
-    choices: this.choices,
-    correct: this.correct,
-    id: this._id 
-  };
-};
-
-const Choice = mongoose.models.Choice || mongoose.model('Choice', ChoiceSchema);
-
-module.exports = { User, Choice };
+module.exports = { User };

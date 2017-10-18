@@ -9,6 +9,7 @@ mongoose.Promise = global.Promise;
 
 const { router: userRouter } = require('./users');
 const { router: quizRouter } = require('./quizzes');
+const { router: choiceRouter } = require('./choices');
 
 const { router: authRouter, basicStrategy, jwtStrategy } = require('./auth');
 const passport = require('passport');
@@ -33,6 +34,7 @@ app.use(
 
 
 app.use('/api/users', userRouter);
+app.use('/api/choices', choiceRouter);
 app.use('/api/quizzes', quizRouter);
 app.use('/api/auth/', authRouter);
 
