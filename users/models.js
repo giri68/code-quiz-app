@@ -25,8 +25,13 @@ const UserSchema = mongoose.Schema({
   },
   quizzes: [{
     id: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
-    name: { type: String } // copy of data from Quiz
-  }]
+    name: { type: String },
+    total: { type: Number },
+    completed: { type: Number },
+    correct: { type: Number },
+  }],
+  badges: { type: String },
+  recent: [{type: String}]
 });
 
 UserSchema.methods.apiRepr = function () {

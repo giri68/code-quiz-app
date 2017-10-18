@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 const { User, Choice } = require('./models');
+const { Question } = require('../quizzes');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -141,51 +142,62 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-router.post('/:id/choices', jsonParser, (req, res)=> {
+router.post('/choices', jsonParser, (req, res)=> {
   //console.log(req.body.favouriteGameId); 
   let userId = req.body.userId;
   let questionId = req.body.questionId;
   let quizId = req.body.quizId;
   let choices = req.body.choices;
-  Choice.create({userId, questionId, quizId, choices})
+  return Choice.create({userId, questionId, quizId, choices})
     .then(choice => res.status(204).json(choice))
     .catch(err => {
       res.status(500).json({ message: 'internal server error' });
     });
 });
 
-router.put('/:id/choices', jsonParser, (req, res) => {
+router.put('/choices/:id', jsonParser, (req, res) => {
+  console.log('req.body', req.body);
   // read array of choices from body
   const quizChoices = req.body.choices; //choices are array
+  console.log('quizChoices',quizChoices);
   const quizId = req.body.quizId;
   const userId = req.body.userId;
   // loop thru choices array and calculate score
+  let theChoice = quizChoices[0];
+  console.log('theChoice',theChoice);
+  
   quizChoices.forEach(choice=>{
     // sort choices by id
-    choice.answers.sort((a._id,b._id) => a._id-b._id);
-    console.log(choice.answers); 
+    // choice.answers.sort((a._id,b._id) => a._id-b._id);
+    console.log('choice',choice);
     return Question.findOne({_id: choice.questionId })
     // get the matching question
-    .then((question)=>{
+      .then((question)=>{
+        console.log('question',question);
       // get the correct answer from the question
-      return question.answers.filter(answer => answer.correct);
-    })
-    .then((correctAnswers)=>{
-      // sort answers by id
-      return question.answers.sort((a._id,b._id) => a._id-b._id);      
-    })
-    .then(correctAnswers => {
-      // return true or false;
-      return choice.answers === correctAnswers;
-    })    
-    .then(correct => {
-      return res.status(204).send(correct);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-    });
-})
+        return question.answers.filter(answer => answer.correct);
+      })
+    // .then((correctAnswers)=>{
+    //   // sort answers by id
+    //   return question.answers.sort((a._id,b._id) => a._id-b._id);      
+    // })
+      .then(correctAnswers => {
+        console.log('correctAnswers',correctAnswers);        
+        console.log('theChoice.answers',theChoice.answers);        
+        // return true or false;
+        return theChoice.answers === correctAnswers;
+      })    
+      // UPDATE THE CHOICE IN THE DATABASE
+      .then(correct => {
+        console.log('correct',correct);
+        return res.status(204).send(correct);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ code: 500, message: 'Internal server error' });
+      });
+  });
+});
 
 
 // access user by id
