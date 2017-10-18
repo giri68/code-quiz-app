@@ -9,18 +9,14 @@ choices = 1st is true, 2nd is false
 "userId": "59e51b41c5944e09d2bc9036",
 "questionId": "59e651e1c7bea3a51c15d900",
 "quizId": "59e651e1c7bea3a51c15d8fe",
-"choices" : [
-  {"optionId" : "59e651e1c7bea3a51c15d904"}
-]
+"choiceIds": [ "59e651e1c7bea3a51c15d904" ]
 }
 
 {
 "userId": "59e51b41c5944e09d2bc9036",
 "questionId": "59e651e1c7bea3a51c15d900",
 "quizId": "59e651e1c7bea3a51c15d8fe",
-"choices" : [
-  {"optionId" : "59e651e1c7bea3a51c15d903"}
-]
+"choiceIds": [ "59e651e1c7bea3a51c15d903" ]
 }
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

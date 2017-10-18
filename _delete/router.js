@@ -142,7 +142,20 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
-// CHECK THIS WITH MULTIPLES
+router.post('/choices', jsonParser, (req, res)=> {
+  //req.body === { userId: '' , questionId: '', quizId: '' , choices: [ { id: '' } ] } ; 
+  //req.body.choices === {  choices: [ { id: '' } ] } ; 
+  let userId = req.body.userId;
+  let questionId = req.body.questionId;
+  let quizId = req.body.quizId;
+  let choices = req.body.choices;
+  return Choice.create({userId, questionId, quizId, choices})
+    .then(choice => res.status(204).json(choice))
+    .catch(err => {
+      res.status(500).json({ message: 'internal server error' });
+    });
+});
+
 const formatQuestionOptionIds = question => {
   let correct = question.answers.filter(answer => answer.correct);
   console.log('correct',correct);                
@@ -151,72 +164,75 @@ const formatQuestionOptionIds = question => {
   let correctSort = correct_id.sort((a,b)=>a-b);   
   console.log('correctSort',correctSort); 
   let correctJoin = correctSort.join(', ');   
-  console.log('correctJoin',correctJoin); 
+  console.log('correctSort',correctJoin); 
   return correctJoin;
 };
 
-// CHECK THIS WITH MULTIPLES
 const formatChoiceIds = choices => {
-  console.log('choicesRaw',choices); 
-  let choicesClean = choices.map(choice => choice.optionId);
-  console.log('choicesClean',choicesClean); 
-  let choicesSort = choicesClean.sort((a,b) => a-b);
+  let choicesSort = choices.choiceIds.sort((a,b) => a-b);
   console.log('choicesSort',choicesSort); 
   let choicesJoin = choicesSort.join(', ');   
-  console.log('choicesJoin',choicesJoin); 
+  console.log('correctSort',choicesJoin); 
   return choicesJoin;
 };
 
-router.post('/choices', jsonParser, (req, res)=> {
-  let makeSureReqBodyHasThisFormat =  {
-    "userId": "59e51b41c5944e09d2bc9036",
-    "questionId": "59e651e1c7bea3a51c15d900",
-    "quizId": "59e651e1c7bea3a51c15d8fe",
-    "choices" : [
-      {"optionId" : "59e651e1c7bea3a51c15d904"},
-      {"optionId" : "59e651e1c7bea3a51c15d905"},
-    ]
-  };
-  let userId = req.body.userId;
-  let questionId = req.body.questionId;
-  let quizId = req.body.quizId;
-  let choices = req.body.choices;             
-  let formattedChoices = formatChoiceIds(choices);          // format choice ids as sorted string
-  let choiceId;
-  let isCorrect;
-  return Choice.create({userId, questionId, quizId, choices})  // enter choice in db
-    .then(choice => {
-      console.log('choiceCreated',choice);
-      choiceId = choice._id;                                  // save & hoist id of choice created
-      console.log('saved choice._id',choice._id);
-      return Question.findById( questionId );                 // find associated question
-    })
-    .then(question=>formatQuestionOptionIds(question))       // format answers as a sorted string
-    .then(questionIds=> {
-      return isCorrect = questionIds === formattedChoices;   // compare, return true or false, hoist
-    })    
-    .then(correct => {
-      return Choice.findByIdAndUpdate(choiceId, { $set: {correct: isCorrect} }, { new: true });
-    })
-    .then(correct => res.status(200).json(isCorrect))          // return true or false
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-    });
+router.put('/choices/:id', jsonParser, (req, res) => {
+  console.log('req.body', req.body);
+  // read array of choices from body
+  const questions = req.body.questions; //choices are array
+  console.log('questions 163',questions);
+  const quizId = req.body.quizId;
+  const userId = req.body.userId;
+  // loop thru choices array and calculate score
+  
+  
+  questions.forEach(question=>{
+    // console.log('question 170',question);
+    // // let choices = question.choiceIds.sort((a,b) => a-b);
+    // console.log('choices',choices);
+
+
+
+
+    // get the matching question
+    return Question.findOne({_id: question.questionId })
+    .then((question)=>formatQuestionOptionIds(question))
+      // .then((question)=>{
+      //   console.log('question found 177',question);
+      //   return question.answers.filter(answer => answer.correct);
+      // })
+      // .then(correctAnswers => {
+      //   console.log('correctAnswers 181',correctAnswers);                
+      //   return correctAnswers.map(answer=>answer._id);
+      // })   
+      // .then(correctAnswers => {
+      //   return correctAnswers.map(answer=>String(answer));
+      // })
+      // .then(correctAnswers => {
+      //   console.log('correctAnswers 188',correctAnswers);  
+      //   correctAnswers.sort((a,b)=>a-b);   
+      //   console.log('correctAnswers 190',correctAnswers);  
+        
+      //   console.log('choices 192',choices);        
+        // return true or false;
+      // return choices.join(',') === correctAnswers.join(',');
+      // })    
+      // UPDATE THE CHOICE IN THE DATABASE
+      .then((questionIds)=>{
+        console.log('end question',question);
+        return questionIds === formatChoiceIds(question);
+      })
+      .then(correct => {
+        console.log('correct',correct);
+        return res.status(204).send(correct);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ code: 500, message: 'Internal server error' });
+      });
+  });
 });
 
-// WE DON'T NEED THIS ANYMORE! ;)
-// router.put('/choices/:id', jsonParser, (req, res) => {
-//   console.log(req.body);
-//   return Question.findOne({_id: req.body.questionId })
-//     .then(question=>formatQuestionOptionIds(question))
-//     .then(questionIds=> questionIds === formatChoiceIds(req.body.choiceIds))
-//     .then(correct => res.status(200).send(correct))
-//     .catch(err => {
-//       console.log(err);
-//       res.status(500).json({ code: 500, message: 'Internal server error' });
-//     });
-// });
 
 // access user by id
 router.get('/user/:userId', (req, res) => {
