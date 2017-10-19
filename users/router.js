@@ -5,6 +5,9 @@
 const express = require('express');
 const router = express.Router();
 
+var qs = require('qs');
+var assert = require('assert');
+
 const { User, } = require('./models');
 
 const bodyParser = require('body-parser');
@@ -194,6 +197,27 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
       }
       res.status(500).json({ code: 500, message: 'Internal server error' });
     });
+});
+
+// update a user data (any data other than credentials)
+router.put('/:id/data', jsonParser, (req, res) => { // add back jwtAuth
+  const updateUser = qs.parse(req.body);
+  console.log('req.body', req.body);
+  console.log('updateUser', updateUser);
+  return User.findByIdAndUpdate(req.params.id,
+    { $set: updateUser },
+    { new: true },
+    function (err, user) {
+      if (err) return res.send(err);
+      res.status(201).json(user.apiRepr());
+    }
+  ) // end findByIdAndUpdate
+    // .catch(err => {
+    //   if (err.reason === 'ValidationError') {
+    //     return res.status(err.code).json(err);
+    //   }
+    //   res.status(500).json({ code: 500, message: 'Internal server error' });
+    // });
 });
 
 // get all users DANGER ZONE!!!!

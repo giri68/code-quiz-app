@@ -56,6 +56,7 @@ router.get('/:quizId', (req, res) => {
 router.get('/:quizId/questions/', (req, res) => {
   return Question.find({quizId: req.params.quizId})
     .then(questions => {
+      console.log(questions);
       return res.status(200).json(questions);
     })
     .catch(err => {
