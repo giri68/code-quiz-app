@@ -33,19 +33,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'What is a DOM?',
       answers: [{
-        answer: 'Document Object Model',
+        option: 'Document Object Model',
         correct: true,
       },
       {
-        answer: 'Name of Dog',
+        option: 'Name of Dog',
         correct: false,
       },
       {
-        answer: 'Mobster Name',
+        option: 'Mobster Name',
         correct: false,
       },
       {
-        answer: 'Department of Ministry',
+        option: 'Department of Ministry',
         correct: false,
       }
       ]
@@ -54,19 +54,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'What is a HTML5?',
       answers: [{
-        answer: 'name of HTML',
+        option: 'name of HTML',
         correct: false,
       },
       {
-        answer: 'version of HTML',
+        option: 'version of HTML',
         correct: true,
       },
       {
-        answer: 'Structure of HTML',
+        option: 'Structure of HTML',
         correct: false,
       },
       {
-        answer: 'name of DOM',
+        option: 'name of DOM',
         correct: false,
       }
       ]
@@ -75,19 +75,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'What is a semantic HTML?',
       answers: [{
-        answer: 'Name of HTML tag',
+        option: 'Name of HTML tag',
         correct: false,
       },
       {
-        answer: 'HTML version',
+        option: 'HTML version',
         correct: false,
       },
       {
-        answer: 'Meaning and Information of the webpage',
+        option: 'Meaning and Information of the webpage',
         correct: true,
       },
       {
-        answer: 'use of HTML',
+        option: 'use of HTML',
         correct: false,
       }
       ]
@@ -100,19 +100,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'What is a CSS?',
       answers: [{
-        answer: 'Cascading Style Sheet',
+        option: 'Cascading Style Sheet',
         correct: true,
       },
       {
-        answer: 'Customer style sheet',
+        option: 'Customer style sheet',
         correct: false,
       },
       {
-        answer: 'Version of style sheet',
+        option: 'Version of style sheet',
         correct: false,
       },
       {
-        answer: 'use of style sheet',
+        option: 'use of style sheet',
         correct: false,
       }
       ]
@@ -121,19 +121,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'Why is CSS used?',
       answers: [{
-        answer: 'For layout of webpage',
+        option: 'For layout of webpage',
         correct: false,
       },
       {
-        answer: 'styling to the web page',
+        option: 'styling to the web page',
         correct: true,
       },
       {
-        answer: 'conect with the database',
+        option: 'conect with the database',
         correct: false,
       },
       {
-        answer: 'to connect JQuery',
+        option: 'to connect JQuery',
         correct: false,
       }
       ]
@@ -142,19 +142,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'What does \'Cascade\' refer to?',
       answers: [{
-        answer: 'Dishwashing liqud',
+        option: 'Dishwashing liqud',
         correct: false,
       },
       {
-        answer: 'A place to whitewater raft',
+        option: 'A place to whitewater raft',
         correct: false,
       },
       {
-        answer: 'The most confusing rule of CSS property assignment',
+        option: 'The most confusing rule of CSS property assignment',
         correct: true,
       },
       {
-        answer: 'What CSS does when it breaks',
+        option: 'What CSS does when it breaks',
         correct: false,
       }
       ]
@@ -163,19 +163,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'How do you use hex colors in CSS?',
       answers: [{
-        answer: 'Doesn\'t matter as long as you use 6',
+        option: 'Doesn\'t matter as long as you use 6',
         correct: false,
       },
       {
-        answer: '#abc',
+        option: '#abc',
         correct: true,
       },
       {
-        answer: '#80fc53',
+        option: '#80fc53',
         correct: true,
       },
       {
-        answer: 'CSS doesn\'t use hex colors',
+        option: 'CSS doesn\'t use hex colors',
         correct: false,
       }
       ]
@@ -184,19 +184,19 @@ const listOfQuestions = [
       inputType: 'checkbox', 
       question: 'What is relative positioning?',
       answers: [{
-        answer: 'That\'s physics, not CSS',
+        option: 'That\'s physics, not CSS',
         correct: false,
       },
       {
-        answer: 'Offset from static positioning',
+        option: 'Offset from static positioning',
         correct: true,
       },
       {
-        answer: 'A way to float the darkest colors to the front',
+        option: 'A way to float the darkest colors to the front',
         correct: false,
       },
       {
-        answer: 'A way to get ahead in front-end development',
+        option: 'A way to get ahead in front-end development',
         correct: false,
       }
       ]

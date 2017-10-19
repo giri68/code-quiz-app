@@ -29,34 +29,21 @@ const formatQuestionOptionIds = question => {
   return correctJoin;
 };
 
-// CHECK THIS WITH MULTIPLES
-const formatChoiceIds = choices => {
-  console.log('choicesRaw',choices); 
-  let choicesClean = choices.map(choice => choice.optionId);
-  console.log('choicesClean',choicesClean); 
-  let choicesSort = choicesClean.sort((a,b) => a-b);
-  console.log('choicesSort',choicesSort); 
-  let choicesJoin = choicesSort.join(', ');   
-  console.log('choicesJoin',choicesJoin); 
-  return choicesJoin;
-};
-
 // post choice (answer a question)
 router.post('/', jsonParser, (req, res)=> {
   let makeSureReqBodyHasThisFormat =  {
     "userId": "59e51b41c5944e09d2bc9036",
     "questionId": "59e651e1c7bea3a51c15d900",
     "quizId": "59e651e1c7bea3a51c15d8fe",
-    "choices" : [
-      {"optionId" : "59e651e1c7bea3a51c15d904"},
-      {"optionId" : "59e651e1c7bea3a51c15d905"},
-    ]
+    "choices" : [ "59e651e1c7bea3a51c15d904", "59e651e1c7bea3a51c15d905" ]
   };
   let userId = req.body.userId;
   let questionId = req.body.questionId;
   let quizId = req.body.quizId;
-  let choices = req.body.choices;             
-  let formattedChoices = formatChoiceIds(choices);          // format choice ids as sorted string
+  let choices = req.body.choices;
+  console.log('choices var', choices);
+  
+  let formattedChoices = (choices).sort((a,b) => a-b).join(','); 
   let choiceId;
   let isCorrect;
   return Choice.create({userId, questionId, quizId, choices})  // enter choice in db
@@ -68,6 +55,8 @@ router.post('/', jsonParser, (req, res)=> {
     })
     .then(question=>formatQuestionOptionIds(question))       // format answers as a sorted string
     .then(questionIds=> {
+      console.log('questionIds', questionIds);
+      console.log('formattedChoices', formattedChoices);
       return isCorrect = questionIds === formattedChoices;   // compare, return true or false, hoist
     })    
     .then(correct => {

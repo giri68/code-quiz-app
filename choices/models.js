@@ -8,7 +8,7 @@ const ChoiceSchema = mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   questionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' },
   quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
-  choices: [{ id: { type: String } }], // these should match answer ids
+  choices: [ { type: String } ], // these should match answer ids
   correct: {type: Boolean} // comparison on server side at time of scoring
 });
 

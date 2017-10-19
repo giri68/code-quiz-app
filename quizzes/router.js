@@ -56,8 +56,23 @@ router.get('/:quizId', (req, res) => {
 router.get('/:quizId/questions/', (req, res) => {
   return Question.find({quizId: req.params.quizId})
     .then(questions => {
-      console.log(questions);
-      return res.status(200).json(questions);
+      console.log('unformatted', questions);
+      const questionApiRepr = function (question) {
+        console.log('single question', question);
+        return { 
+          answers: question.answers.map(answer=> {
+            return {
+              option: answer.option,
+              id: answer._id
+            };
+          }), 
+          question: question.question,
+          inputType: question.inputType,
+          id: question._id };
+      };
+      const formattedQuestions = questions.map(question=>questionApiRepr(question));
+      console.log('formattedQuestions',formattedQuestions);      
+      return res.status(200).json(formattedQuestions);
     })
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });

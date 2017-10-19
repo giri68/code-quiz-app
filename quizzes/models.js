@@ -17,9 +17,9 @@ const QuestionSchema = mongoose.Schema({
 
 QuestionSchema.methods.apiRepr = function () {
   return { 
-    options: this.option.map(option=>delete option.correct), // figure out how to mask answers.correct
-    inputType: this.inputType,
     question: this.question,
+    inputType: this.inputType,
+    answers: this.answers.map(option=>delete option.correct), 
     id: this._id };
 };
 
