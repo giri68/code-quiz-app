@@ -1,5 +1,5 @@
 {
-  "name": "Code Quiz",
+  "name": "CodeQuiz",
   "version": "1.0.0",
   "description": "Like Code Wars, but more mobile-friendly and multiple choice.",
   "main": "index.js",

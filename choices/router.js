@@ -30,7 +30,7 @@ const formatQuestionOptionIds = question => {
 };
 
 // post choice (answer a question)
-router.post('/', jsonParser, (req, res)=> {
+router.post('/', jsonParser, jwtAuth, (req, res)=> {
   let makeSureReqBodyHasThisFormat =  {
     "userId": "59e51b41c5944e09d2bc9036",
     "questionId": "59e651e1c7bea3a51c15d900",

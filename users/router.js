@@ -200,7 +200,7 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
 });
 
 // update a user data (any data other than credentials)
-router.put('/:id/data', jsonParser, (req, res) => { // add back jwtAuth
+router.put('/:id/data', jsonParser, jwtAuth, (req, res) => { // add back jwtAuth
   const updateUser = qs.parse(req.body);
   console.log('req.body', req.body);
   console.log('updateUser', updateUser);
