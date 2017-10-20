@@ -14,9 +14,9 @@ const ChoiceSchema = mongoose.Schema({
 
 ChoiceSchema.methods.apiRepr = function () {
   return { 
-    userId: this.firstName,
-    questionId: this.lastName,
-    quizId: this.username,
+    userId: this.userId,
+    questionId: this.questionId,
+    quizId: this.quizId,
     choices: this.choices,
     correct: this.correct,
     id: this._id 

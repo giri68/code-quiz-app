@@ -62,18 +62,30 @@ router.post('/', jsonParser, jwtAuth, (req, res)=> {
     .then(correct => {
       return Choice.findByIdAndUpdate(choiceId, { $set: {correct: isCorrect} }, { new: true });
     })
-    .then(correct => res.status(200).json(isCorrect))          // return true or false
+    .then(correct => res.status(200).json(correct))          // return entire choice w/true or false
     .catch(err => {
       console.log(err);
       res.status(500).json({ code: 500, message: 'Internal server error' });
     });
 });
 
+const choiceApiRepr = choice => { // improve this to use apply()
+  return { 
+    userId: choice.userId,
+    questionId: choice.questionId,
+    quizId: choice.username,
+    choices: choice.choices,
+    correct: choice.correct,
+    id: choice._id 
+  };
+};
+
 // get choice by quiz id and user id
 router.get('/quizzes/:quizId/users/:userId', (req, res) => {
-  return Choice.find({quizId: req.params.quizId})
-    .then(choice => { // UPDATE ENDPOINT TO FORMAT ARRAY
-      return res.status(200).json(choice.apiRepr());
+  return Choice.find({ quizId: req.params.quizId, userId: req.params.userId })
+    .then(choices => {
+      const formattedChoices = choices.map(choice=>choiceApiRepr(choice));
+      return res.status(200).json(formattedChoices);
     })
     .catch(err => {
       res.status(500).json({ code: 500, message: 'Internal server error' });
