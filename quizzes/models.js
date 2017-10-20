@@ -39,6 +39,8 @@ QuizSchema.methods.apiRepr = function () {
   return { 
     name: this.name,
     description: this.description,
+    category: this.category,
+    difficulty: this.difficulty,
     id: this._id };
 };
 
