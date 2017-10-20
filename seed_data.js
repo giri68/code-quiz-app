@@ -11,16 +11,39 @@ const { User, Choice } = require('./users');
 
 const listOfQuizzes = [
   {
-    name: 'HTML Quiz',
+    name: 'HTML Basic',
     description: 'This is a quiz of HTML',
     category: 'HTML',
     difficulty: 1,
   }, 
   { 
-    name: 'CSS Quiz',
+    name: 'CSS Basic',
     description: 'This is a quiz of CSS',
     category: 'CSS',
     difficulty: 1,
+  },
+  {
+    name: 'JS Basic',
+    description: 'This is a quiz of HTML',
+    category: 'JS',
+    difficulty: 1,
+  }, 
+  { 
+    name: 'jQuery Quiz',
+    description: 'Are you still using that?',
+    category: 'JS',
+    difficulty: 2,
+  },  {
+    name: 'React Quiz',
+    description: 'Oh yeah!',
+    category: 'JS',
+    difficulty: 3,
+  }, 
+  { 
+    name: 'HTML a11y',
+    description: 'Learn it! Use it!',
+    category: 'HTML',
+    difficulty: 2,
   }
 ];
 
@@ -92,7 +115,7 @@ const listOfQuestions = [
       }
       ]
     }
-  ],
+  ], // END ARRAY OF QUESTIONS
   // @@@@@@@@@@@@ 2ND LIST OF QUESTIONS @@@@@@@@@
   // @@@@@@@@@@@@ CSS QUIZ @@@@@@@@@
   [
@@ -201,7 +224,359 @@ const listOfQuestions = [
       }
       ]
     }
-  ]
+  ], // END ARRAY OF QUESTIONS
+  // @@@@@@@@@@@@ 3RD LIST OF QUESTIONS @@@@@@@@@
+  // @@@@@@@@@@@@ JS BASIC QUIZ @@@@@@@@@
+  [
+    {
+      inputType: 'checkbox', 
+      question: 'What is a DOM?',
+      answers: [{
+        option: 'Document Object Model',
+        correct: true,
+      },
+      {
+        option: 'Name of Dog',
+        correct: false,
+      },
+      {
+        option: 'Mobster Name',
+        correct: false,
+      },
+      {
+        option: 'Department of Ministry',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What is a HTML5?',
+      answers: [{
+        option: 'name of HTML',
+        correct: false,
+      },
+      {
+        option: 'version of HTML',
+        correct: true,
+      },
+      {
+        option: 'Structure of HTML',
+        correct: false,
+      },
+      {
+        option: 'name of DOM',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What is a semantic HTML?',
+      answers: [{
+        option: 'Name of HTML tag',
+        correct: false,
+      },
+      {
+        option: 'HTML version',
+        correct: false,
+      },
+      {
+        option: 'Meaning and Information of the webpage',
+        correct: true,
+      },
+      {
+        option: 'use of HTML',
+        correct: false,
+      }
+      ]
+    }
+  ], // END ARRAY OF QUESTIONS
+  // @@@@@@@@@@@@ 4TH LIST OF QUESTIONS @@@@@@@@@
+  // @@@@@@@@@@@@ JQUER QUIZ @@@@@@@@@
+  [
+    {
+      inputType: 'checkbox', 
+      question: 'What is a CSS?',
+      answers: [{
+        option: 'Cascading Style Sheet',
+        correct: true,
+      },
+      {
+        option: 'Customer style sheet',
+        correct: false,
+      },
+      {
+        option: 'Version of style sheet',
+        correct: false,
+      },
+      {
+        option: 'use of style sheet',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'Why is CSS used?',
+      answers: [{
+        option: 'For layout of webpage',
+        correct: false,
+      },
+      {
+        option: 'styling to the web page',
+        correct: true,
+      },
+      {
+        option: 'conect with the database',
+        correct: false,
+      },
+      {
+        option: 'to connect JQuery',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What does \'Cascade\' refer to?',
+      answers: [{
+        option: 'Dishwashing liqud',
+        correct: false,
+      },
+      {
+        option: 'A place to whitewater raft',
+        correct: false,
+      },
+      {
+        option: 'The most confusing rule of CSS property assignment',
+        correct: true,
+      },
+      {
+        option: 'What CSS does when it breaks',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'How do you use hex colors in CSS?',
+      answers: [{
+        option: 'Doesn\'t matter as long as you use 6',
+        correct: false,
+      },
+      {
+        option: '#abc',
+        correct: true,
+      },
+      {
+        option: '#80fc53',
+        correct: true,
+      },
+      {
+        option: 'CSS doesn\'t use hex colors',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What is relative positioning?',
+      answers: [{
+        option: 'That\'s physics, not CSS',
+        correct: false,
+      },
+      {
+        option: 'Offset from static positioning',
+        correct: true,
+      },
+      {
+        option: 'A way to float the darkest colors to the front',
+        correct: false,
+      },
+      {
+        option: 'A way to get ahead in front-end development',
+        correct: false,
+      }
+      ]
+    }
+  ], // END ARRAY OF QUESTIONS
+  // @@@@@@@@@@@@ 5TH LIST OF QUESTIONS @@@@@@@@@
+  // @@@@@@@@@@@@ REACT QUIZ @@@@@@@@@
+  [
+    {
+      inputType: 'checkbox', 
+      question: 'What is a DOM?',
+      answers: [{
+        option: 'Document Object Model',
+        correct: true,
+      },
+      {
+        option: 'Name of Dog',
+        correct: false,
+      },
+      {
+        option: 'Mobster Name',
+        correct: false,
+      },
+      {
+        option: 'Department of Ministry',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What is a HTML5?',
+      answers: [{
+        option: 'name of HTML',
+        correct: false,
+      },
+      {
+        option: 'version of HTML',
+        correct: true,
+      },
+      {
+        option: 'Structure of HTML',
+        correct: false,
+      },
+      {
+        option: 'name of DOM',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What is a semantic HTML?',
+      answers: [{
+        option: 'Name of HTML tag',
+        correct: false,
+      },
+      {
+        option: 'HTML version',
+        correct: false,
+      },
+      {
+        option: 'Meaning and Information of the webpage',
+        correct: true,
+      },
+      {
+        option: 'use of HTML',
+        correct: false,
+      }
+      ]
+    }
+  ], // END ARRAY OF QUESTIONS
+  // @@@@@@@@@@@@ 6TH LIST OF QUESTIONS @@@@@@@@@
+  // @@@@@@@@@@@@ A11Y QUIZ @@@@@@@@@
+  [
+    {
+      inputType: 'checkbox', 
+      question: 'What is a CSS?',
+      answers: [{
+        option: 'Cascading Style Sheet',
+        correct: true,
+      },
+      {
+        option: 'Customer style sheet',
+        correct: false,
+      },
+      {
+        option: 'Version of style sheet',
+        correct: false,
+      },
+      {
+        option: 'use of style sheet',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'Why is CSS used?',
+      answers: [{
+        option: 'For layout of webpage',
+        correct: false,
+      },
+      {
+        option: 'styling to the web page',
+        correct: true,
+      },
+      {
+        option: 'conect with the database',
+        correct: false,
+      },
+      {
+        option: 'to connect JQuery',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What does \'Cascade\' refer to?',
+      answers: [{
+        option: 'Dishwashing liqud',
+        correct: false,
+      },
+      {
+        option: 'A place to whitewater raft',
+        correct: false,
+      },
+      {
+        option: 'The most confusing rule of CSS property assignment',
+        correct: true,
+      },
+      {
+        option: 'What CSS does when it breaks',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'How do you use hex colors in CSS?',
+      answers: [{
+        option: 'Doesn\'t matter as long as you use 6',
+        correct: false,
+      },
+      {
+        option: '#abc',
+        correct: true,
+      },
+      {
+        option: '#80fc53',
+        correct: true,
+      },
+      {
+        option: 'CSS doesn\'t use hex colors',
+        correct: false,
+      }
+      ]
+    },
+    {
+      inputType: 'checkbox', 
+      question: 'What is relative positioning?',
+      answers: [{
+        option: 'That\'s physics, not CSS',
+        correct: false,
+      },
+      {
+        option: 'Offset from static positioning',
+        correct: true,
+      },
+      {
+        option: 'A way to float the darkest colors to the front',
+        correct: false,
+      },
+      {
+        option: 'A way to get ahead in front-end development',
+        correct: false,
+      }
+      ]
+    }
+  ], // END ARRAY OF QUESTIONS
 ];
 
 // This works, but Mongo is auto-populating sub-document IDs, so not needed.
