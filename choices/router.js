@@ -24,7 +24,7 @@ const formatQuestionOptionIds = question => {
   console.log('correct_id',correct_id);  
   let correctSort = correct_id.sort((a,b)=>a-b);   
   console.log('correctSort',correctSort); 
-  let correctJoin = correctSort.join(', ');   
+  let correctJoin = correctSort.join(',');   
   console.log('correctJoin',correctJoin); 
   return correctJoin;
 };
@@ -55,9 +55,9 @@ router.post('/', jsonParser, jwtAuth, (req, res)=> {
     })
     .then(question=>formatQuestionOptionIds(question))       // format answers as a sorted string
     .then(questionIds=> {
-      console.log('questionIds', questionIds);
-      console.log('formattedChoices', formattedChoices);
-      return isCorrect = questionIds === formattedChoices;   // compare, return true or false, hoist
+      isCorrect = questionIds === formattedChoices;   // compare, return true or false, hoist
+      console.log('SCORING: correct questionIds ===', questionIds, 'and ', 'formattedChoices ===', formattedChoices, '. SCORE: ', isCorrect);
+      return isCorrect;   // compare, return true or false, hoist
     })    
     .then(correct => {
       return Choice.findByIdAndUpdate(choiceId, { $set: {correct: isCorrect} }, { new: true });

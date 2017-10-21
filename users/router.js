@@ -95,8 +95,8 @@ function confirmUniqueUsername(username) {
 router.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password', 'firstName', 'lastName'];
   const missingField = requiredFields.find(field => !(field in req.body));
-  console.log('rb', req.body);
-  console.log('mf', missingField);
+  console.log('new user request body', req.body);
+  console.log('new user missing field', missingField);
   // only used when creating user
   if (missingField) {
     return res.status(422).json({
@@ -106,7 +106,6 @@ router.post('/', jsonParser, (req, res) => {
       location: missingField
     });
   }
-
   let userValid = {};
   // used whenever changing or creating user
   if (validateUserFields(req.body).valid === true) {
@@ -116,6 +115,7 @@ router.post('/', jsonParser, (req, res) => {
     return res.status(code).json(validateUserFields(req.body));
   }
 
+  console.log('user validated');
   let { username, password, lastName, firstName } = userValid;
 
   return User.find({ username })

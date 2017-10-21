@@ -19,11 +19,12 @@ passport.use(jwtStrategy);
 const cors = require('cors');
 const morgan = require('morgan');
 
-app.use(
-  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
-    skip: (req, res) => process.env.NODE_ENV === 'test'
-  })
-);
+// app.use(
+//   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
+//     skip: (req, res) => process.env.NODE_ENV === 'test'
+//   })
+// );
+app.use(morgan());
 
 app.use(
   cors({
