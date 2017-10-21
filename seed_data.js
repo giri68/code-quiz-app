@@ -643,7 +643,7 @@ return runServer()
     return Promise.all(arrayOfQuestionPromises);
   })
   .then(questions => {
-    // console.log('questions',questions);
+    // loop through questions and get total # per quiz, and update total property in quizzes;
     console.log('SUCCESS! CHECK YOUR DATABASE!!');
   })
   .catch(err => {
