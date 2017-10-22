@@ -33,6 +33,7 @@ const QuizSchema = mongoose.Schema({
   description: { type: String },
   category: { type: String }, // HTML, CSS, JS
   difficulty: { type: Number }, // scale of 1 easy 5 advanced
+  total: { type: Number }, // total number of questions, populated via maint. script
 });
 
 QuizSchema.methods.apiRepr = function () {
@@ -41,6 +42,7 @@ QuizSchema.methods.apiRepr = function () {
     description: this.description,
     category: this.category,
     difficulty: this.difficulty,
+    total: this.total,
     id: this._id };
 };
 

@@ -15,17 +15,11 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-
-// CHECK THIS WITH MULTIPLES
 const formatQuestionOptionIds = question => {
   let correct = question.answers.filter(answer => answer.correct);
-  console.log('correct',correct);                
   let correct_id = correct.map(answer=>String(answer._id));
-  console.log('correct_id',correct_id);  
   let correctSort = correct_id.sort((a,b)=>a-b);   
-  console.log('correctSort',correctSort); 
   let correctJoin = correctSort.join(',');   
-  console.log('correctJoin',correctJoin); 
   return correctJoin;
 };
 
@@ -41,16 +35,13 @@ router.post('/', jsonParser, jwtAuth, (req, res)=> {
   let questionId = req.body.questionId;
   let quizId = req.body.quizId;
   let choices = req.body.choices;
-  console.log('choices var', choices);
   
   let formattedChoices = (choices).sort((a,b) => a-b).join(','); 
   let choiceId;
   let isCorrect;
   return Choice.create({userId, questionId, quizId, choices})  // enter choice in db
     .then(choice => {
-      console.log('choiceCreated',choice);
       choiceId = choice._id;                                  // save & hoist id of choice created
-      console.log('saved choice._id',choice._id);
       return Question.findById( questionId );                 // find associated question
     })
     .then(question=>formatQuestionOptionIds(question))       // format answers as a sorted string

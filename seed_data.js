@@ -11,39 +11,45 @@ const { User, Choice } = require('./users');
 
 const listOfQuizzes = [
   {
-    name: 'HTML Basic',
+    name: 'HTML Very Basic',
     description: 'This is a quiz of HTML',
     category: 'HTML',
     difficulty: 1,
+    total: 1
   }, 
   { 
     name: 'CSS Basic',
     description: 'This is a quiz of CSS',
     category: 'CSS',
     difficulty: 1,
+    total: null
   },
   {
     name: 'JS Basic',
     description: 'This is a quiz of HTML',
     category: 'JS',
     difficulty: 1,
+    total: null
   }, 
   { 
     name: 'jQuery Quiz',
     description: 'Are you still using that?',
     category: 'JS',
     difficulty: 2,
+    total: null
   },  {
     name: 'React Quiz',
     description: 'Oh yeah!',
     category: 'JS',
     difficulty: 3,
+    total: null
   }, 
   { 
     name: 'HTML a11y',
     description: 'Learn it! Use it!',
     category: 'HTML',
     difficulty: 2,
+    total: null
   }
 ];
 
@@ -579,17 +585,6 @@ const listOfQuestions = [
   ], // END ARRAY OF QUESTIONS
 ];
 
-// This works, but Mongo is auto-populating sub-document IDs, so not needed.
-// listOfQuizzes.forEach((quiz, index)=>{
-//   quiz.questions.id = index;
-//   quiz.questions.forEach((question, index) => {
-//     question.id = index;
-//     question.answers.forEach((answer, index) => {
-//       answer.id = index;
-//     });
-//   });
-// });
-
 function dbConnect(url = DATABASE_URL) {
   return mongoose.connect(DATABASE_URL, {useMongoClient: true}).catch(err => {
     console.error('Mongoose failed to connect');
@@ -618,11 +613,14 @@ function runServer(url = DATABASE_URL, port = PORT) {
   });
 }
 
-return runServer()   
+return runServer()  
   .then(()=> {
-    const arrayOfPromises = listOfQuizzes.map((quiz, idx)=>{
-      return Quiz.create(listOfQuizzes[idx]);
+    const arrayOfPromises = listOfQuizzes.map((quiz, index)=>{
+      console.log('1 in array of promises');
+      console.log('quiz#', index, quiz);
+      return Quiz.create(listOfQuizzes[index]);
     });
+    console.log('array of promises', arrayOfPromises);
     return Promise.all(arrayOfPromises);
   })
   .then((quizzes)=> {
@@ -637,8 +635,8 @@ return runServer()
     });
   })
   .then(()=> {
-    const arrayOfQuestionPromises = listOfQuestions.map((question, idx)=>{
-      return Question.insertMany(listOfQuestions[idx]); // insertMany because inner array
+    const arrayOfQuestionPromises = listOfQuestions.map((question, index)=>{
+      return Question.insertMany(listOfQuestions[index]); // insertMany because inner array
     });
     return Promise.all(arrayOfQuestionPromises);
   })
@@ -646,35 +644,34 @@ return runServer()
     // loop through questions and get total # per quiz, and update total property in quizzes;
     console.log('SUCCESS! CHECK YOUR DATABASE!!');
   })
+  .then(()=>{
+    const arrayOfUpdates = listOfQuizzes.map(quiz => {
+      return Quiz.find({'name': quiz.name})
+        .then(quiz=>{
+          console.log('1',  quiz);
+          return quiz[0]._id;
+        })
+        .then((id)=>{
+          console.log('2', id);
+          return Question.find({quizId: id});
+        })
+        .then((questions)=>{
+          console.log('3 questions', questions);
+          const count = questions.length;
+          const quizId = questions[0].quizId;
+          console.log('4 count, quizId', count, quizId);
+          return Quiz.findByIdAndUpdate(quizId, {$set: {'total': count}}, { new: true });
+        })
+        .then((quiz)=>{
+          return console.log('5 updated quiz', quiz);
+        });
+    }); // end arrayOfUpdates
+    console.log('start promises');
+    return Promise.all(arrayOfUpdates);
+  })
+  .then(()=>{
+    console.log('SUCCESS! TOTALS ADDED TO DATABASE!!');        
+  })    
   .catch(err => {
     console.log(err);
   });
-
-  // router.put('/:questionId', jsonParser, jwtAuth, (req, res) => {
-  //   Question
-  //     .findByIdAndUpdate(req.params.questionId, {
-  //       $set: {
-  //         question:req.body.question,
-  //         inputType: req.body.inputType,
-  //         answers: req.body.answers
-  //       }
-  //     })
-  //     .then(game => res.status(204).end())
-  //     .catch(err => res.status(500).json({ message: 'Internal server error' }));
-  // });
-
-  // delete entire quiz
-// router.delete('/:quizId', jwtAuth, (req, res) => {
-//   Quiz
-//     .findByIdAndRemove(req.params.quizid)
-//     .then(quiz => res.status(204).end())
-//     .catch(err => res.status(500).json({ message: 'Internal server error' }));
-// });
-
-// // delete a question
-// router.delete('/:questionId', jwtAuth, (req, res) => {
-//   Question
-//     .findByIdAndRemove(req.params.questionId)
-//     .then(quiz => res.status(204).end())
-//     .catch(err => res.status(500).json({ message: 'Internal server error' }));
-// });
