@@ -13,6 +13,7 @@ const UserSchema = mongoose.Schema({
   quizzes: [{
     id: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
     name: { type: String },
+    attempt: { type: Number },
     total: { type: Number },
     completed: { type: Number },
     correct: { type: Number },

@@ -238,6 +238,8 @@ router.get('/user/:userId', (req, res) => {
   console.log('res', res);
   return User.findById(req.params.userId)
     .then(user => {
+      // let userRepr = user.apiRepr();
+      // filter userRepr.quizzes to remove quizzes.archive === true
       return res.status(200).json(user.apiRepr());
     })
     .catch(err => {
