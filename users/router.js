@@ -91,6 +91,7 @@ function confirmUniqueUsername(username) {
     });
 }
 
+// quizzes are archived is a user clicks 'delete quiz'
 const removeArchivedQuizzes = user => {
   console.log('removeArchivedQuizzes start',user);
   const userQuizzes = user.quizzes;
