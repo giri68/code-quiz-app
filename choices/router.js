@@ -33,13 +33,14 @@ router.post('/', jsonParser, jwtAuth, (req, res)=> {
   };
   let userId = req.body.userId;
   let questionId = req.body.questionId;
+  let attempt = req.body.attempt;
   let quizId = req.body.quizId;
   let choices = req.body.choices;
   
   let formattedChoices = (choices).sort((a,b) => a-b).join(','); 
   let choiceId;
   let isCorrect;
-  return Choice.create({userId, questionId, quizId, choices})  // enter choice in db
+  return Choice.create({userId, questionId, attempt, quizId, choices})  // enter choice in db
     .then(choice => {
       choiceId = choice._id;                                  // save & hoist id of choice created
       return Question.findById( questionId );                 // find associated question
@@ -53,7 +54,7 @@ router.post('/', jsonParser, jwtAuth, (req, res)=> {
     .then(correct => {
       return Choice.findByIdAndUpdate(choiceId, { $set: {correct: isCorrect} }, { new: true });
     })
-    .then(correct => res.status(200).json(correct))          // return entire choice w/true or false
+    .then(choice => res.status(200).json(choice.apiRepr()))    // return entire choice w/true or false
     .catch(err => {
       console.log(err);
       res.status(500).json({ code: 500, message: 'Internal server error' });
@@ -72,10 +73,12 @@ const choiceApiRepr = choice => { // improve this to use apply()
 };
 
 // get choice by quiz id and user id
-router.get('/quizzes/:quizId/users/:userId', (req, res) => {
-  return Choice.find({ quizId: req.params.quizId, userId: req.params.userId })
+router.get('/quizzes/:quizId/users/:userId/:attempt', (req, res) => {
+  return Choice.find({ quizId: req.params.quizId, userId: req.params.userId , attempt: req.params.attempt })
     .then(choices => {
+      console.log('choices found', choices);
       const formattedChoices = choices.map(choice=>choiceApiRepr(choice));
+      console.log('formatted choices found', formattedChoices);
       return res.status(200).json(formattedChoices);
     })
     .catch(err => {

@@ -91,6 +91,17 @@ function confirmUniqueUsername(username) {
     });
 }
 
+const removeArchivedQuizzes = user => {
+  console.log('removeArchivedQuizzes start',user);
+  const userQuizzes = user.quizzes;
+  const noArchiveQuizzes = userQuizzes.filter(quiz=>quiz.archive !== true);
+  user.quizzes = noArchiveQuizzes;
+  console.log('removeArchivedQuizzes end',user);
+  return user;  
+};
+
+// @@@@@@@@@@@@@@ END HELPERS, START ENDPOINTS @@@@@@@@@@@@
+
 // create a new user
 router.post('/', jsonParser, (req, res) => {
   const requiredFields = ['username', 'password', 'firstName', 'lastName'];
@@ -186,7 +197,8 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
             { new: true },
             function (err, user) {
               if (err) return res.send(err);
-              res.status(201).json(user.apiRepr());
+              const filteredUser = removeArchivedQuizzes(user.apiRepr());
+              res.status(201).json(filteredUser);
             }
           );
         });
@@ -201,7 +213,7 @@ router.put('/:id', jsonParser, jwtAuth, (req, res) => {
 
 // update a user data (any data other than credentials)
 router.put('/:id/data', jsonParser, jwtAuth, (req, res) => { // add back jwtAuth
-  const updateUser = qs.parse(req.body);
+  const updateUser = req.body;
   console.log('req.body', req.body);
   console.log('updateUser', updateUser);
   return User.findByIdAndUpdate(req.params.id,
@@ -209,7 +221,8 @@ router.put('/:id/data', jsonParser, jwtAuth, (req, res) => { // add back jwtAuth
     { new: true },
     function (err, user) {
       if (err) return res.send(err);
-      res.status(201).json(user.apiRepr());
+      const filteredUser = removeArchivedQuizzes(user.apiRepr());      
+      res.status(201).json(filteredUser);
     }
   ) // end findByIdAndUpdate
     // .catch(err => {
@@ -218,6 +231,35 @@ router.put('/:id/data', jsonParser, jwtAuth, (req, res) => { // add back jwtAuth
     //   }
     //   res.status(500).json({ code: 500, message: 'Internal server error' });
     // });
+});
+
+// get user by id, do NOT return archived quizzes
+router.get('/user/:userId', (req, res) => {
+  console.log('res', res);
+  return User.findById(req.params.userId)
+    .then(user => {
+      const filteredUser = removeArchivedQuizzes(user.apiRepr());
+      return res.status(200).json(filteredUser);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
+});
+
+// @@@@@@@@@@@@@@@@@@ START ADMIN ENDPOINTS @@@@@@@@@@@@@@@@@
+
+// get user by id, DO return archived quizzes
+router.get('/user/:userId/history', (req, res) => {
+  console.log('res', res);
+  return User.findById(req.params.userId)
+    .then(user => {
+      return res.status(200).json(user.apiRepr());
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ code: 500, message: 'Internal server error' });
+    });
 });
 
 // get all users DANGER ZONE!!!!
@@ -229,21 +271,6 @@ router.get('/', (req, res) => {
       return res.status(200).json(usersJSON);
     })
     .catch(err => {
-      res.status(500).json({ code: 500, message: 'Internal server error' });
-    });
-});
-
-// get user by id
-router.get('/user/:userId', (req, res) => {
-  console.log('res', res);
-  return User.findById(req.params.userId)
-    .then(user => {
-      // let userRepr = user.apiRepr();
-      // filter userRepr.quizzes to remove quizzes.archive === true
-      return res.status(200).json(user.apiRepr());
-    })
-    .catch(err => {
-      console.log(err);
       res.status(500).json({ code: 500, message: 'Internal server error' });
     });
 });

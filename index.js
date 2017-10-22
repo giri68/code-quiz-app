@@ -24,7 +24,7 @@ const morgan = require('morgan');
 //     skip: (req, res) => process.env.NODE_ENV === 'test'
 //   })
 // );
-app.use(morgan());
+app.use(morgan('combined'));
 
 app.use(
   cors({
